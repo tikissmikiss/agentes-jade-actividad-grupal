@@ -40,11 +40,6 @@ public class Dashboard extends Agent {
     // logging
     private Logger logger = Logger.getMyLogger(this.getClass().getName());
 
-    public static void main(String[] args) {
-        Dashboard app = new Dashboard();
-        app.runApp();
-    }
-
     private static void setSingleton(Dashboard app) {
         unicaInstancia = app;
     }
