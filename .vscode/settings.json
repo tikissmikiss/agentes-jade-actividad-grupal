@@ -3,7 +3,5 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        // "../../../01 Individual/JADE-all-4.5.0/jade/lib/*.jar",
-        // "../../../01 Individual/JADE-all-4.5.0/jade/lib/",
     ]
 }

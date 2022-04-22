@@ -6,70 +6,10 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launch ActuadorTermostato",
-            "request": "launch",
-            "mainClass": "actuador.ActuadorTermostato",
-            "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
-            "name": "Launch ActuadorTermostatoGUI",
-            "request": "launch",
-            "mainClass": "actuador.ActuadorTermostatoGUI",
-            "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
-            "name": "Launch SensorTemperatura",
-            "request": "launch",
-            "mainClass": "sensor.SensorTemperatura",
-            "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
             "name": "Launch Dashboard",
             "request": "launch",
             "mainClass": "app.Dashboard",
             "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
-            "name": "Launch App",
-            "request": "launch",
-            "mainClass": "app.App",
-            "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
-            "name": "Launch Pru",
-            "request": "launch",
-            "mainClass": "Pru",
-            "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
-            "name": "Launch App",
-            "request": "launch",
-            "mainClass": "App",
-            "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
-            "name": "Launch Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "Launch Jade Plataform",
-            "request": "launch",
-            "mainClass": "jade.Boot",
-            "args": [
-                "-gui",
-                "-name",
-                "ActividadGrupal",
-                "Broker:agentes.Broker"
-            ]
         },
         {
             "type": "java",
