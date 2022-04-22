@@ -6,13 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launch Dashboard",
-            "request": "launch",
-            "mainClass": "app.Dashboard",
-            "projectName": "agentes-grupal_59d692a5"
-        },
-        {
-            "type": "java",
             "name": "Launch Jade App",
             "request": "launch",
             "mainClass": "jade.Boot",
