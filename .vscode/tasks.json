@@ -1,0 +1,38 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "java",
+			"targetPath": "${workspaceFolder}/${workspaceFolderBasename}.jar",
+			"elements": [
+				"${compileOutput}",
+				"${dependencies}"
+			],
+			"problemMatcher": [],
+			"label": "java: build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true,
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "javac",
+			"type": "shell",
+			"command": "javac",
+			"args": [
+				"-d",
+				"${outputPath}/agente",
+				"${sourceFile}"
+			],
+			"problemMatcher": []
+		}
+	]
+}
