@@ -24,10 +24,15 @@ import javax.swing.WindowConstants;
 import jade.core.Agent;
 import jade.util.Logger;
 import jade.wrapper.AgentController;
+import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 
 public class Dashboard extends Agent {
 
+    /**
+     *
+     */
+    private static final String DIALOG = "Dialog";
     private static final String STR_ERROR_CREAR_AGENTE = "Error al crear el agente: ";
     private static final int ANCHO_VENTANA = 450;
     private static final int ALTO_VENTANA = 250;
@@ -100,7 +105,7 @@ public class Dashboard extends Agent {
     private JPanel initSubPanel1() {
         JPanel p1 = new JPanel();
         JButton btnPlataforma = new JButton("\nAbrir Agente Matchmaker\n");
-        btnPlataforma.setFont(new Font("Dialog", Font.BOLD, 13));
+        btnPlataforma.setFont(new Font(DIALOG, Font.BOLD, 13));
         btnPlataforma.setMargin(new Insets(6, 6, 6, 6));
 
         p1.add(btnPlataforma);
@@ -125,7 +130,7 @@ public class Dashboard extends Agent {
         JPanel p2 = new JPanel();
         JButton btnSensor = new JButton("Crear un agente sensor");
         JButton btnActuador = new JButton("Crear un agente actuador");
-        Font font = new Font("Dialog", Font.BOLD, 13);
+        Font font = new Font(DIALOG, Font.BOLD, 13);
         btnSensor.setFont(font);
         btnActuador.setFont(font);
         Insets m = new Insets(6, 6, 6, 6);
@@ -169,13 +174,14 @@ public class Dashboard extends Agent {
     }
 
     private Component initSubPanel3() {
+        Font fuenteDialogo = new Font(DIALOG, Font.PLAIN, 11);
         JPanel panel = new JPanel();
 
         panel.add(new JLabel("Herramientas:"));
 
         JButton btnDummy = new JButton("Agente Dummy");
         btnDummy.setMargin(new Insets(0, 0, 0, 0));
-        btnDummy.setFont(new Font("Dialog", Font.PLAIN, 11));
+        btnDummy.setFont(fuenteDialogo);
         btnDummy.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -193,7 +199,7 @@ public class Dashboard extends Agent {
 
         JButton btnSniffer = new JButton("Agente Sniffer");
         btnSniffer.setMargin(new Insets(0, 0, 0, 0));
-        btnSniffer.setFont(new Font("Dialog", Font.PLAIN, 11));
+        btnSniffer.setFont(fuenteDialogo);
         btnSniffer.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -211,7 +217,7 @@ public class Dashboard extends Agent {
 
         JButton btnInstrospector = new JButton("Agente Instrospector");
         btnInstrospector.setMargin(new Insets(0, 0, 0, 0));
-        btnInstrospector.setFont(new Font("Dialog", Font.PLAIN, 11));
+        btnInstrospector.setFont(fuenteDialogo);
         btnInstrospector.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -249,15 +255,24 @@ public class Dashboard extends Agent {
             public void windowClosing(WindowEvent e) {
                 logger.log(Logger.INFO, "Inténto de cerrar Dashboard GUI. Se requiere confirmación.");
                 if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(frame,
-                        "AVISO: Se va a cerrar la ventana del Dashboard.\n\nPara volver a iniciar agentes desde la GUI deberá reiniciar la aplicación.\n¿Desea cerrar el dashboard?",
+                        "AVISO: Se va a cerrar la ventana del Dashboard.\n\nEsta accion detendra la plataforma Jade. Para volver a iniciar agentes desde la GUI deberá reiniciar la aplicación.\n¿Desea cerrar el dashboard?",
                         "Intentando cerrar el Dashboard",
                         JOptionPane.YES_NO_OPTION)) {
-                    logger.log(Logger.INFO, "Aceptado: Cerrando Dashboard GUI");
-                    // Finalizar agente
-                    doDelete();
-                    frame.dispose();
+                    shutdown(frame);
                 } else {
                     logger.log(Logger.INFO, "Cancelado: Mantener abierto Dashboard GUI");
+                }
+            }
+
+            private void shutdown(JFrame frame) {
+                logger.log(Logger.INFO, "Aceptado: Cerrando Dashboard GUI");
+                // Finalizar agente
+                doDelete();
+                frame.dispose();
+                try {
+                    getContainerController().getPlatformController().kill();
+                } catch (ControllerException e1) {
+                    e1.printStackTrace();
                 }
             }
         });

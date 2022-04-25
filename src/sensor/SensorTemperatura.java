@@ -5,7 +5,6 @@ import java.util.Random;
 
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -14,6 +13,7 @@ import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 import sensor.behaviours.ListenerConfirmSubscription;
 import sensor.behaviours.ListenerProposeSubscription;
+import sensor.behaviours.PeriodicGUIUpdater;
 
 public class SensorTemperatura extends Agent {
 
@@ -67,9 +67,9 @@ public class SensorTemperatura extends Agent {
 
     private int mediaPresion;
 
-    private Logger logger = Logger.getMyLogger(this.getClass().getName());
+    public Logger logger = Logger.getMyLogger(this.getClass().getName());
 
-    private SensorTemperaturaGUI gui;
+    public SensorTemperaturaGUI gui;
 
     private AID actuadorAID;
 
@@ -233,7 +233,7 @@ public class SensorTemperatura extends Agent {
                 "}";
     }
 
-    private void sendDataToActuador() {
+    public void sendDataToActuador() {
         if (actuadorAID != null) {
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             msg.addReceiver(actuadorAID);
@@ -306,40 +306,6 @@ public class SensorTemperatura extends Agent {
 
     public boolean isSubscribed() {
         return matchmakerAID != null;
-    }
-
-    /**
-     * Actualiza la interfaz gráfica cada cierto tiempo
-     * TODO: Se puede aprovechar para enviar datos cuando actuadorAID != null
-     */
-    private final class PeriodicGUIUpdater extends TickerBehaviour {
-        private static final long serialVersionUID = 1L;
-
-        private PeriodicGUIUpdater(Agent a, long period) {
-            super(a, period);
-        }
-
-        @Override
-        public void onTick() {
-            gui.update();
-        }
-    }
-
-    /**
-     * Se ejecuta periodicamente cada un tiempo predefinido
-     */
-    private final class SensorUpdaterBehaviour extends TickerBehaviour {
-        private static final long serialVersionUID = 1L;
-
-        public SensorUpdaterBehaviour(Agent a, long period) {
-            super(a, period);
-        }
-
-        @Override
-        protected void onTick() {
-            logger.info(AGENTE + myAgent.getLocalName() + ": Actualizando datos...");
-            sendDataToActuador();
-        }
     }
 
 }
