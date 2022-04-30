@@ -3,6 +3,7 @@ package sensor;
 import java.time.LocalDate;
 import java.util.Random;
 
+import commun.behaviours.ListenerProposePair;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -14,6 +15,7 @@ import jade.util.Logger;
 import sensor.behaviours.ListenerConfirmSubscription;
 import sensor.behaviours.ListenerProposeSubscription;
 import sensor.behaviours.PeriodicGUIUpdater;
+import sensor.behaviours.SensorToActuatorConversation;
 
 public class SensorTemperatura extends Agent {
 
@@ -35,7 +37,7 @@ public class SensorTemperatura extends Agent {
 
     private static final int[] SD_TEMP = { 5, 10 };
 
-    private static final int[] AVG_TEMP = { 18, 30 };
+    private static final int[] AVG_TEMP = { 18, 26 };
 
     private static final int UPDATE_PERIOD_MS = 1000;
 
@@ -67,13 +69,15 @@ public class SensorTemperatura extends Agent {
 
     private int mediaPresion;
 
-    public Logger logger = Logger.getMyLogger(this.getClass().getName());
+    private Logger logger = Logger.getMyLogger(this.getClass().getName());
 
     public SensorTemperaturaGUI gui;
 
     private AID actuadorAID;
 
     private AID matchmakerAID;
+
+    private boolean status;
 
     private static void incrementContInstancias() {
         contInstancias++;
@@ -105,9 +109,8 @@ public class SensorTemperatura extends Agent {
         // Comportamiento para escuchar propuestas de subscripcion de Matchmaker
         addBehaviour(new ListenerProposeSubscription(this));
 
-        // TODO: Comportamiento TickerBehaviour para comunicar datos con actuador.
-        // TODO: Alternativa - Se puede incluir junto a la actualizacion del GUI
-        // addBehaviour(new SensorUpdaterBehaviour(this, UPDATE_PERIOD_MS));
+        // Comportamiento para escuchar propuestas de emparejado
+        addBehaviour(new ListenerProposePair(this));
     }
 
     private DFAgentDescription[] findMatchmaker() {
@@ -237,6 +240,7 @@ public class SensorTemperatura extends Agent {
         if (actuadorAID != null) {
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             msg.addReceiver(actuadorAID);
+            msg.setConversationId("data");
             msg.addUserDefinedParameter("temperatura", String.valueOf(getTemperatura()));
             msg.addUserDefinedParameter("humedad", String.valueOf(getHumedad()));
             msg.addUserDefinedParameter("presion", String.valueOf(getPresion()));
@@ -290,6 +294,7 @@ public class SensorTemperatura extends Agent {
 
     public void setActuadorAID(AID actuadorAID) {
         this.actuadorAID = actuadorAID;
+        addBehaviour(new SensorToActuatorConversation(this, UPDATE_PERIOD_MS));
     }
 
     public AID getMatchmakerAID() {
@@ -304,8 +309,20 @@ public class SensorTemperatura extends Agent {
         return logger;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
     public boolean isSubscribed() {
         return matchmakerAID != null;
+    }
+
+    public void updateGUI() {
+        gui.update();
+    }
+
+    public void setStatus(boolean b) {
+        status = b;
     }
 
 }

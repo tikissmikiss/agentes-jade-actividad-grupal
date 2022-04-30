@@ -11,6 +11,9 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
+import matchmaker.behaviours.AgentFinder;
+import matchmaker.behaviours.ConfirmationPair;
+import matchmaker.behaviours.ListenerSubscriptors;
 
 public class Matchmaker extends Agent {
     /**
@@ -146,6 +149,37 @@ public class Matchmaker extends Agent {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public void runPair(String sensor, String actuator) {
+        AID sensorAID = null;
+        AID actuadorAID = null;
+        for (AID s : sensores) {
+            if (s.getLocalName().equals(sensor)) {
+                sensorAID = s;
+            }
+        }
+        for (AID a : actuadores) {
+            if (a.getLocalName().equals(actuator)) {
+                actuadorAID = a;
+            }
+        }
+        if (sensorAID != null && actuadorAID != null) {
+            ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
+            msg.addReceiver(sensorAID);
+            msg.addReceiver(actuadorAID);
+            msg.setConversationId("pair");
+            msg.addUserDefinedParameter("sensor", sensorAID.getName());
+            msg.addUserDefinedParameter("actuador", actuadorAID.getName());
+            logger.info(AGENTE + getLocalName() + " enviando mensaje de pareo a "
+                    + sensorAID.getName() + " y " + actuadorAID.getName());
+            send(msg);
+
+            addBehaviour(new ConfirmationPair(this, sensorAID, sensores));
+            addBehaviour(new ConfirmationPair(this, actuadorAID, actuadores));
+        } else {
+            logger.log(Logger.SEVERE, "Error al enviar mensaje de pareo. Alguno de los agentes no existe.");
+        }
     }
 
 }

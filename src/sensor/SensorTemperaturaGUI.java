@@ -30,10 +30,14 @@ public class SensorTemperaturaGUI extends JFrame {
     private double temperatura;
     private double humedad;
     private double presion;
+    private boolean status;
+
 
     private JLabel lblTemperatura;
     private JLabel lblHumedad;
     private JLabel lblPresion;
+
+    private JTextField txtStatus;
 
     public SensorTemperaturaGUI(SensorTemperatura a) {
         super("Agente Sensor Temperatura - " + a.getLocalName());
@@ -75,11 +79,11 @@ public class SensorTemperaturaGUI extends JFrame {
         temperatura = myAgent.getTemperatura();
         humedad = myAgent.getHumedad();
         presion = myAgent.getPresion();
-        JTextField e = new JTextField("ON", 3); // TODO sustituir por estado del actuador
-        e.setHorizontalAlignment(0);
-        e.setEditable(false);
-        e.setBackground(new Color(214, 255, 214));
-        p.add(e);
+        txtStatus = new JTextField("ON", 3);
+        txtStatus.setHorizontalAlignment(0);
+        txtStatus.setEditable(false);
+        setStatusGUI();
+        p.add(txtStatus);
         lblTemperatura = new JLabel(String.format("Temp: %.1f ºC", temperatura));
         lblHumedad = new JLabel(String.format("Humedad: %.0f %%", humedad));
         lblPresion = new JLabel(String.format("Presión: %.0f hPa", presion));
@@ -93,9 +97,16 @@ public class SensorTemperaturaGUI extends JFrame {
         temperatura = myAgent.getTemperatura();
         humedad = myAgent.getHumedad();
         presion = myAgent.getPresion();
+        status = myAgent.isStatus();
         lblTemperatura.setText(String.format("Temp: %.1f ºC", temperatura));
         lblHumedad.setText(String.format("Humedad: %.0f %%", humedad));
         lblPresion.setText(String.format("Presión: %.0f hPa", presion));
+        setStatusGUI();
+    }
+
+    private void setStatusGUI() {
+        txtStatus.setText(this.status ? "ON" : "OFF");
+        txtStatus.setBackground(this.status ? Color.RED : Color.GREEN);
     }
 
 }

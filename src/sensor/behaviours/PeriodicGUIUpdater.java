@@ -5,7 +5,6 @@ import sensor.SensorTemperatura;
 
 /**
  * Actualiza la interfaz gráfica cada cierto tiempo
- * TODO: Se puede aprovechar para enviar datos cuando actuadorAID != null
  */
 public final class PeriodicGUIUpdater extends TickerBehaviour {
     /**
@@ -22,6 +21,6 @@ public final class PeriodicGUIUpdater extends TickerBehaviour {
 
     @Override
     public void onTick() {
-        this.sensor.gui.update();
+        this.sensor.updateGUI();
     }
 }

@@ -1,4 +1,4 @@
-package matchmaker;
+package matchmaker.behaviours;
 
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
@@ -7,12 +7,13 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
+import matchmaker.Matchmaker;
 
 /**
  * Clase OneShotBehaviour para descubrimiento de agentes Sensor y Actuador.
  * Envia una propuesta de subscripcion a todos los agentes encontrados.
  */
-final class AgentFinder extends OneShotBehaviour {
+public final class AgentFinder extends OneShotBehaviour {
     /**
      *
      */

@@ -28,7 +28,7 @@ public class ActuadorTermostatoGUI extends JFrame {
 
     private static final String FORMATO_TEMPERATURA = "Temperatura: %s ºC";
 
-    private static final int ANCHO_VENTANA = 450;
+    private static final int ANCHO_VENTANA = 500;
 
     private static final int ALTO_VENTANA = 140;
 
@@ -37,8 +37,6 @@ public class ActuadorTermostatoGUI extends JFrame {
     private static final double ESCALAR_POSICION_HORIZONTAL = 0.90;
 
     private static final double VERTICAL_UTIL_PANTALLA = 0.75;
-
-    private Logger logger = Logger.getMyLogger(this.getClass().getName());
 
     private ActuadorTermostato myAgent;
 
@@ -55,8 +53,12 @@ public class ActuadorTermostatoGUI extends JFrame {
     private double humedad;
 
     private double presion;
-    
-    private String sensor;
+
+    private boolean status;
+
+    private JSpinner spinnerTemperatura;
+
+    private JTextField txtStatus;
 
     public ActuadorTermostatoGUI(ActuadorTermostato a) {
         super("Agente Actuador Termostato - " + a.getLocalName());
@@ -108,16 +110,17 @@ public class ActuadorTermostatoGUI extends JFrame {
         pC1.add(lblPresion);
         // C2
         pC2.add(new JLabel("Temperatura Consigna:"));
-        JSpinner spinnerTemperatura = new JSpinner();
-        spinnerTemperatura.setValue(20);
+        spinnerTemperatura = new JSpinner();
+        spinnerTemperatura.setValue(25);
         pC2.add(spinnerTemperatura);
         // C3
         pC3.add(new JLabel("Estado:"));
-        JTextField e = new JTextField("ON", 3); // TODO sustituir por estado del agente
-        e.setHorizontalAlignment(0);
-        e.setEditable(false);
-        e.setBackground(new Color(214, 255, 214));
-        pC3.add(e);
+        txtStatus = new JTextField(this.status ? "ON" : "OFF", 3);
+        txtStatus.setHorizontalAlignment(0);
+        txtStatus.setEditable(false);
+        // txtStatus.setBackground(new Color(214, 255, 214));
+        setStatusGUI();
+        pC3.add(txtStatus);
 
         this.add(pMain);
     }
@@ -134,19 +137,25 @@ public class ActuadorTermostatoGUI extends JFrame {
         return String.format("%.1f", temperatura);
     }
 
-    public void update() {
-        temperatura = myAgent.getTemperatura();
-        humedad = myAgent.getHumedad();
-        presion = myAgent.getPresion();
-        sensor = myAgent.getSensor();
+    public void updateGUI(String sensor, double temp, double humedad, double presion, boolean status) {
+        this.temperatura = temp;
+        this.humedad = humedad;
+        this.presion = presion;
+        this.status = status;
         lblSensor.setText(String.format(FORMATO_SENSOR, sensor));
         lblTemperatura.setText(String.format(FORMATO_TEMPERATURA, strTemperatura()));
         lblHumedad.setText(String.format(FORMATO_HUMEDAD, strHumedad()));
         lblPresion.setText(String.format(FORMATO_PRESION, strPresion()));
+        setStatusGUI();
     }
 
-    public void actualizarVentana() {
-        // TODO Cambiar por update()
+    private void setStatusGUI() {
+        txtStatus.setText(this.status ? "ON" : "OFF");
+        txtStatus.setBackground(this.status ? Color.RED : Color.GREEN);
+    }
+
+    public int getThreshold() {
+        return (int) spinnerTemperatura.getValue();
     }
 
 }

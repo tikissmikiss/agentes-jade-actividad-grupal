@@ -1,11 +1,12 @@
-package matchmaker;
+package matchmaker.behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.leap.Properties;
+import matchmaker.Matchmaker;
 
-final class ListenerSubscriptors extends CyclicBehaviour {
+public final class ListenerSubscriptors extends CyclicBehaviour {
     /**
      *
      */
@@ -16,7 +17,7 @@ final class ListenerSubscriptors extends CyclicBehaviour {
             MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE),
             MessageTemplate.MatchConversationId("subscribe"));
 
-    ListenerSubscriptors(Matchmaker matchmaker) {
+    public ListenerSubscriptors(Matchmaker matchmaker) {
         super(matchmaker);
         m = matchmaker;
     }

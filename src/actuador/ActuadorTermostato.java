@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import actuador.behaviours.ListenerConfirmSubscription;
 import actuador.behaviours.ListenerProposeSubscription;
+import commun.behaviours.ListenerProposePair;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -16,7 +17,7 @@ import jade.util.Logger;
 public class ActuadorTermostato extends Agent {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final String TYPE = "Actuador";
 
     private static int contInstancias = 0;
@@ -34,6 +35,10 @@ public class ActuadorTermostato extends Agent {
     private double temperatura;
 
     private AID matchmakerAID;
+
+    private AID sensorAID;
+
+    private boolean status;
 
     private static void incrementContInstancias() {
         contInstancias++;
@@ -62,6 +67,10 @@ public class ActuadorTermostato extends Agent {
 
         // Comportamiento para escuchar propuestas de subscripcion de Matchmaker
         addBehaviour(new ListenerProposeSubscription(this));
+
+        // Comportamiento para escuchar propuestas de emparejado
+        addBehaviour(new ListenerProposePair(this));
+
     }
 
     private DFAgentDescription[] findMatchmaker() {
@@ -194,12 +203,33 @@ public class ActuadorTermostato extends Agent {
         return numInstancia;
     }
 
-    public String getSensor() {
-        return null;
-    }
-
     public boolean isSubscribed() {
         return matchmakerAID != null;
+    }
+
+    public void setSensorAID(AID sensorAID) {
+        this.sensorAID = sensorAID;
+        addBehaviour(new ActuatorToSensorConversation(this));
+    }
+
+    public AID getSensorAID() {
+        return sensorAID;
+    }
+
+    public void updateAndReplySensor(ACLMessage msg) {
+        // TODO: verificar que el mensaje sea del sensor
+        String nameSensor = msg.getSender().getName();
+        logger.info("Recibiendo datos sensor: " + nameSensor);
+
+        temperatura = Double.parseDouble(msg.getUserDefinedParameter("temperatura"));
+        humedad = Double.parseDouble(msg.getUserDefinedParameter("humedad"));
+        presion = Double.parseDouble(msg.getUserDefinedParameter("presion"));
+        status = temperatura <= gui.getThreshold();
+        gui.updateGUI(nameSensor, temperatura, humedad, presion, status);
+
+        ACLMessage reply = msg.createReply();
+        reply.addUserDefinedParameter("estado", String.valueOf(status));
+        send(reply);
     }
 
 }

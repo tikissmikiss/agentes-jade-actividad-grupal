@@ -49,6 +49,10 @@ public class Dashboard extends Agent {
         unicaInstancia = app;
     }
 
+    public static void main(String[] args) {
+        System.out.println("Iniciando Dashboard...");
+    }
+
     @Override
     protected void setup() {
         if (unicaInstancia == null) {
@@ -83,7 +87,6 @@ public class Dashboard extends Agent {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         int centerX = (int) d.getWidth() / 2;
         int centerY = (int) d.getHeight() / 2;
-        // f.setLocation(centerX - f.getWidth() / 2, centerY / 2 - f.getHeight() / 2);
         f.setLocation(centerX - f.getWidth() / 2, centerY / 3 - f.getHeight() / 2);
         f.setVisible(true);
     }

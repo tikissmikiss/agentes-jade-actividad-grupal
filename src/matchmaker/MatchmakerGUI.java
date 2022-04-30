@@ -93,7 +93,11 @@ public class MatchmakerGUI extends JFrame {
     }
 
     protected void btnPairClicked() {
-        // TODO: enviar mensaje a cada parte con el AID del otro
+        if (cmbSensores.getSelectedItem() != null && cmbActuadores.getSelectedItem() != null) {
+            String sensor = (String) cmbSensores.getSelectedItem();
+            String actuator = (String) cmbActuadores.getSelectedItem();
+            matchmaker.runPair(sensor, actuator);
+        }
     }
 
     private void initView() {
