@@ -50,7 +50,14 @@ public class Dashboard extends Agent {
     }
 
     public static void main(String[] args) {
-        System.out.println("Iniciando Dashboard...");
+        System.out.println("Iniciando Plataforma Jade...");
+        try {
+            String[] arguments = { "-gui", "-name", "ActividadGrupal", "Dashboard:app.Dashboard" };
+            jade.Boot.main(arguments);
+        } catch (Exception e) {
+            Logger.getJADELogger("name").info("Error al iniciar la plataforma Jade: " + e.getMessage());
+            System.exit(1);
+        }
     }
 
     @Override
