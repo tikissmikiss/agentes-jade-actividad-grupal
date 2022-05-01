@@ -34,7 +34,7 @@ public class MatchmakerGUI extends JFrame {
 
     private JButton btnPair = new JButton("Emparejar");
 
-    private Component btnUpdate = new JButton("Actualizar Listas");
+    private JButton btnUpdate = new JButton("Actualizar Listas");
 
     private JComboBox<Object> cmbSensores = new JComboBox<>();
 
@@ -68,6 +68,7 @@ public class MatchmakerGUI extends JFrame {
         pSub3.add(cmbActuadores, BorderLayout.SOUTH);
 
         initListeners();
+        btnUpdate.setVisible(false);
 
         this.add(pMain);
     }
