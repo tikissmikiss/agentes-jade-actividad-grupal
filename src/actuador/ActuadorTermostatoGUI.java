@@ -15,8 +15,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import jade.util.Logger;
-
 public class ActuadorTermostatoGUI extends JFrame {
     private static final long serialVersionUID = 1L;
 

@@ -217,7 +217,6 @@ public class ActuadorTermostato extends Agent {
     }
 
     public void updateAndReplySensor(ACLMessage msg) {
-        // TODO: verificar que el mensaje sea del sensor
         String nameSensor = msg.getSender().getName();
         logger.info("Recibiendo datos sensor: " + nameSensor);
 
